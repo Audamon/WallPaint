@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import Modal from 'react-modal';
 import Input from '../../../Components/Form/Input';
 import InputWrapper from '../../../Components/Form/InputWrapper';
 import Title from '../../../Components/Title/Title';
@@ -9,8 +10,25 @@ import Button from '../../../Components/Form/Button';
 
 import Calculate from '../../../Service/Calculate';
 
+const customStyles = {
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
+
 export default function Calculator() {
   const [wall, setWall] = useState({});
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [message, setMessage] = useState('');
   const handleChange = (e) => {
     if (e.target.id === 'height') {
       setWall({
@@ -36,8 +54,13 @@ export default function Calculator() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    Calculate(wall);
+    Calculate(wall, setMessage);
+    setModalIsOpen(true);
   };
+  function closeModal() {
+    setModalIsOpen(false);
+  }
+
   return (
     <>
       <CalculatorContainer>
@@ -54,7 +77,7 @@ export default function Calculator() {
               <Input
                 label="Altura da parede em metros 1"
                 type="text"
-                value={wall[1] === undefined ? '' : wall[1].height }
+                value={wall[1] === undefined ? '' : wall[1].height}
                 onChange={handleChange}
                 id="height"
                 name="1"
@@ -64,7 +87,7 @@ export default function Calculator() {
               <Input
                 label="Largura da parede em metros 1"
                 type="text"
-                value={wall[1] === undefined ? '' : wall[1].width }
+                value={wall[1] === undefined ? '' : wall[1].width}
                 onChange={handleChange}
                 id="width"
                 name="1"
@@ -74,7 +97,7 @@ export default function Calculator() {
               <Input
                 label="Quantidades de janelas na parede 1"
                 type="text"
-                value={wall[1] === undefined ? '' : wall[1].windows }
+                value={wall[1] === undefined ? '' : wall[1].windows}
                 onChange={handleChange}
                 id="windows"
                 name="1"
@@ -84,7 +107,7 @@ export default function Calculator() {
               <Input
                 label="Quantidades de portas na parede 1"
                 type="text"
-                value={wall[1] === undefined ? '' : wall[1].doors }
+                value={wall[1] === undefined ? '' : wall[1].doors}
                 onChange={handleChange}
                 id="doors"
                 name="1"
@@ -146,7 +169,7 @@ export default function Calculator() {
                 type="text"
                 value={wall[3] === undefined ? '' : wall[3].height}
                 onChange={handleChange}
-                id='height'
+                id="height"
                 name="3"
               />
             </InputWrapper>
@@ -156,7 +179,7 @@ export default function Calculator() {
                 type="text"
                 value={wall[3] === undefined ? '' : wall[3].width}
                 onChange={handleChange}
-                id='width'
+                id="width"
                 name="3"
               />
             </InputWrapper>
@@ -166,7 +189,7 @@ export default function Calculator() {
                 type="text"
                 value={wall[3] === undefined ? '' : wall[3].windows}
                 onChange={handleChange}
-                id='windows'
+                id="windows"
                 name="3"
               />
             </InputWrapper>
@@ -176,7 +199,7 @@ export default function Calculator() {
                 type="text"
                 value={wall[3] === undefined ? '' : wall[3].doors}
                 onChange={handleChange}
-                id='doors'
+                id="doors"
                 name="3"
               />
             </InputWrapper>
@@ -191,7 +214,7 @@ export default function Calculator() {
                 type="text"
                 value={wall[4] === undefined ? '' : wall[4].height}
                 onChange={handleChange}
-                id='height'
+                id="height"
                 name="4"
               />
             </InputWrapper>
@@ -201,7 +224,7 @@ export default function Calculator() {
                 type="text"
                 value={wall[4] === undefined ? '' : wall[4].width}
                 onChange={handleChange}
-                id='width'
+                id="width"
                 name="4"
               />
             </InputWrapper>
@@ -211,7 +234,7 @@ export default function Calculator() {
                 type="text"
                 value={wall[4] === undefined ? '' : wall[4].windows}
                 onChange={handleChange}
-                id='windows'
+                id="windows"
                 name="4"
               />
             </InputWrapper>
@@ -221,7 +244,7 @@ export default function Calculator() {
                 type="text"
                 value={wall[4] === undefined ? '' : wall[4].doors}
                 onChange={handleChange}
-                id='doors'
+                id="doors"
                 name="4"
               />
             </InputWrapper>
@@ -230,6 +253,16 @@ export default function Calculator() {
             </SubmitContainer>
           </InputContainer>
         </FormWrapper>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Quantidade de latas de tintas necessarias"
+          ariaHideApp={false}
+        >
+          <Message>{message}</Message>
+          <ModalButton onClick={closeModal}>Voltar</ModalButton>
+        </Modal>
       </CalculatorContainer>
     </>
   );
@@ -266,4 +299,14 @@ const InputContainer = styled.div`
     margin: 0 20px 10px 20px;
     padding: 0 20px 20px 80px;
   }
+`;
+const ModalButton = styled.button`
+  width: 50%;
+  height: 30px;
+  margin-top: 20px;
+`;
+
+const Message = styled.p`
+ line-break: break-all;
+ white-space: pre;
 `;
