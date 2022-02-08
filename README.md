@@ -5,8 +5,12 @@
 
 git clone https://gitlab.com/Audamon/wallpaint
 
+## Instalação 
+
 ### `npm i`
  Instala as dependências.
+
+## Rodar
 
 ### `npm start`
 
